@@ -1,0 +1,27 @@
+#
+# Accounting File - http://shorewall.net/Accounting.html
+#
+# /etc/shorewall/accounting
+#
+#ACTION         CHAIN   SOURCE  DESTINATION     PROTOCOL        DEST            SOURCE
+#                                                               PORT            PORT
+web:COUNT       -       eth1    eth0            tcp             -               80
+web:COUNT       -       eth1    eth0            tcp             -               443
+DONE            web
+
+
+smtp:COUNT       -       eth0    eth1            tcp             25
+smtp:COUNT       -       eth1    eth0            tcp             -               25
+DONE            smtp
+
+
+pop3:COUNT       -       eth0    eth1            tcp             110
+pop3:COUNT       -       eth1    eth0            tcp             -               110
+DONE            pop3
+
+
+imap:COUNT       -       eth0    eth1            tcp             143
+imap:COUNT       -       eth1    eth0            tcp             -               143
+DONE            imap
+
+#LAST LINE -- ADD YOUR ENTRIES BEFORE THIS ONE -- DO NOT REMOVE
