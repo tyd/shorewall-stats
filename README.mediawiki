@@ -9,8 +9,8 @@ This perl script uses Shorewall's accounting capabilities and MRTG to graph traf
 * Perl 5.x.x or later ([http://www.perl.com/ website])
 
 ==Installation:==
-* Step 1 - Download shorewall-stats.tar.gz
-* Step 2 - Extract files:   tar xvfz shorewall-stats.tar.gz
+* Step 1 - Download [https://github.com/downloads/tyd/shorewall-stats/shorewall-stats-0.0.2.tar.gz shorewall-stats-0.0.2.tar.gz]
+* Step 2 - Extract files:   tar xvfz shorewall-stats-0.0.2.tar.gz
 * Step 3 - Edit path information in shorewall-stats.pl
 * Step 4 - Copy shorewall-stats.pl to a suitable location and chmod 755 shorewall-stats.pl
 * Step 5 - Create entries in Shorewall accounting config file using the following as a guide: 
