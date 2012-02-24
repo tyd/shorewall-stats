@@ -1,0 +1,97 @@
+__NOTOC__
+
+==Description:==
+This perl script uses Shorewall's accounting capabilities and MRTG to graph traffic for just about any service. Examples for graphing HTTP/HTTPS, SMTP, IMAP and POP3 traffic are included. 
+
+==Requirements:==
+* Shorewall 2.0.X or later ([http://www.shorewall.net/ website])
+* MRTG 2.X.X or later ([http://people.ee.ethz.ch/%7Eoetiker/webtools/mrtg/ website])
+* Perl 5.x.x or later ([http://www.perl.com/ website])
+
+==Installation:==
+* Step 1 - Download shorewall-stats.tar.gz
+* Step 2 - Extract files:   tar xvfz shorewall-stats.tar.gz
+* Step 3 - Edit path information in shorewall-stats.pl
+* Step 4 - Copy shorewall-stats.pl to a suitable location and chmod 755 shorewall-stats.pl
+* Step 5 - Create entries in Shorewall accounting config file using the following as a guide: 
+<pre>
+# REQUIRED FORMAT TO GATHER STATS PROPERLY
+#
+#ACTION         CHAIN   SOURCE  DESTINATION     PROTOCOL        DEST            SOURCE
+#                                                               PORT            PORT
+# TRAFFIC IN
+smtp:COUNT       -       eth0    eth1            tcp             25
+# TRAFFIC OUT
+smtp:COUNT       -       eth1    eth0            tcp             -               25
+DONE            smtp
+</pre>
+
+* Step 6 - Copy contents of included mrtg.cfg into your current mrtg.cfg and update path to shorewall-stats.pl
+* Step 7 - Execute mrtg with the modified mrtg.cfg file 3 times.
+* Step 8 - (may not be needed) Add cron job to execute modified mrtg.cfg every 5 minutes. 
+
+==Example shorewall accounting config file:==
+
+<pre>
+#
+# Accounting File - http://shorewall.net/Accounting.html
+#
+# /etc/shorewall/accounting
+#
+#ACTION         CHAIN   SOURCE  DESTINATION     PROTOCOL        DEST            SOURCE
+#                                                               PORT            PORT
+web:COUNT       -       eth1    eth0            tcp             -               80
+web:COUNT       -       eth1    eth0            tcp             -               443
+DONE            web
+
+
+smtp:COUNT       -       eth0    eth1            tcp             25
+smtp:COUNT       -       eth1    eth0            tcp             -               25
+DONE            smtp
+
+
+pop3:COUNT       -       eth0    eth1            tcp             110
+pop3:COUNT       -       eth1    eth0            tcp             -               110
+DONE            pop3
+
+
+imap:COUNT       -       eth0    eth1            tcp             143
+imap:COUNT       -       eth1    eth0            tcp             -               143
+DONE            imap
+
+#LAST LINE -- ADD YOUR ENTRIES BEFORE THIS ONE -- DO NOT REMOVE
+</pre>
+
+==Example mrtg.cfg:==
+<pre>
+WorkDir: /var/www/html/mrtg
+###################################################
+# EXAMPLE MRTG CONFIG FILE
+###################################################
+# HTTP/HTTPS OUT TRAFFIC
+
+Target[http]: `/path/to/shorewall-stats.pl web`
+MaxBytes[http]: 12500000
+Title[http]: HTTP Traffic
+PageTop[http]: <H1>HTTP Traffic</H1>
+LegendI[http]: &nbsp;HTTP Out:
+LegendO[http]: &nbsp;HTTPS Out:
+
+# SMTP TRAFFIC
+Target[smtp]: `/path/to/shorewall-stats.pl smtp`
+MaxBytes[smtp]: 12500000
+Title[smtp]: SMTP Traffic
+PageTop[smtp]: <H1>SMTP Traffic</H1>
+
+# POP3 TRAFFIC
+Target[pop3]: `/path/to/shorewall_stats.pl pop3`
+MaxBytes[pop3]: 12500000
+Title[pop3]: POP3 Traffic
+PageTop[pop3]: <H1>POP3 Traffic</H1>
+
+# IMAP TRAFFIC
+Target[imap]: `/path/to/shorewall-stats.pl imap`
+MaxBytes[imap]: 12500000
+Title[imap]: IMAP Traffic
+PageTop[imap]: <H1>IMAP Traffic</H1>
+</pre>
